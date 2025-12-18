@@ -26,7 +26,6 @@ jobs:
       - name: Install dependencies
         run: |
           pip install mlflow==2.19.0
-          pip install dagshub==0.3.31
           pip install scikit-learn pandas numpy
 
       - name: Set MLflow Tracking URI
