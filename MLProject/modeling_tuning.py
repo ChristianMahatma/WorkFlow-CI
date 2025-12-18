@@ -77,8 +77,18 @@ def train_model(train_path, test_path, target):
 
 # =========================
 # CLI
-# =========================
 if __name__ == "__main__":
-    path_data = "smartphone_preprocessing/smartphone_preprocessed.csv"
-    target_column = "Price"
-    tune_and_log(data_path=path_data, target=target_column)
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train", required=True)
+    parser.add_argument("--test", required=True)
+    parser.add_argument("--target", required=True)
+    args = parser.parse_args()
+
+    train_model(
+        train_path=args.train,
+        test_path=args.test,
+        target=args.target
+    )
+
