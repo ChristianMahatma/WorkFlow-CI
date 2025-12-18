@@ -11,6 +11,7 @@ dependencies:
   - pyarrow==22.0.0
   - scikit-learn==1.8.0
   - scipy==1.16.3
-  - dagshub
+  - dagshub==0.3.31
 name: mlflow-env
+
 
