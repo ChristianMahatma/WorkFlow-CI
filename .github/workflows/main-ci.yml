@@ -1,1 +1,59 @@
+name: MLflow CI - Train Model
 
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run actions/checkout@v3
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12.7
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.7'
+
+      - name: Check Env
+        run: |
+          python --version
+          pip --version
+
+      - name: Install dependencies
+        run: |
+          pip install mlflow==2.19.0
+          pip install scikit-learn pandas numpy
+
+      - name: Set MLflow Tracking URI
+        run: |
+          echo "MLFLOW_TRACKING_URI=file://$GITHUB_WORKSPACE/MLProject/mlruns" >> $GITHUB_ENV
+
+      - name: Run mlflow project
+        env:
+          MLFLOW_TRACKING_URI: ${{ env.MLFLOW_TRACKING_URI }}
+        run: |
+          echo "ROOT DIRECTORY:"
+          pwd
+          ls -R
+
+          echo "Masuk ke folder MLProject..."
+          cd MLProject
+          pwd
+          ls -R
+
+          echo "Jalankan MLflow Project"
+          mlflow run . \
+            --env-manager=local \
+            -P data_path=smartphone_preprocessing/smartphone_preprocessed.csv \
+            -P target=Price
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r MLProject/requirements.txt || echo "requirements.txt tidak ditemukan"
+
+      - name: Upload to Google Drive
+        run: echo "Upload to drive kamu tetap di sini"
