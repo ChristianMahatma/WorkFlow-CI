@@ -11,9 +11,6 @@ jobs:
   train-model:
     runs-on: ubuntu-latest
     
-    env:
-      MLFLOW_TRACKING_URI: ./mlruns
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -22,29 +19,28 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.12.7'
-        cache: 'pip'
-
-    - name: Install Dependencies
+    
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Pastikan semua library yang ada di modelling.py terinstall di sini
         pip install pandas numpy scikit-learn mlflow matplotlib seaborn
-
+    
     - name: Run MLflow Project
       run: |
-        # Menjalankan proyek dengan manager lokal agar menggunakan library yang diinstall di atas
+        # Menjalankan MLProject
         mlflow run MLProject --env-manager local --experiment-name "Bike-Price-CI"
-
-    - name: Get MLflow Run Details
-      if: always()
+    
+    - name: Get latest MLflow run_id and Check Files
       run: |
-        echo "Menampilkan daftar hasil eksperimen:"
-        ls -R mlruns/
+        ls -R
+        if [ -d "MLProject/mlruns" ]; then
+          cp -r MLProject/mlruns .
+        fi
 
     - name: Upload MLflow artifacts
       if: success()
       uses: actions/upload-artifact@v4
       with:
-        name: bike-model-experiment-results
+        name: trained-model-results
         path: mlruns/
         retention-days: 7
