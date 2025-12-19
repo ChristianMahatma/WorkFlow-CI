@@ -1,10 +1,8 @@
-name: Smartphone_Price_Prediction
+name: bike-prediction-project
 
 conda_env: conda.yaml
 
 entry_points:
   main:
-    parameters:
-      data_path: {type: string, default: "smartphone_preprocessing/smartphone_preprocessed.csv"}
-      target: {type: string, default: "Price"}
-    command: "python modeling_tuning.py"
+    command: "python modeling.py"
+
